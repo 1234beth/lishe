@@ -22,11 +22,11 @@ module.exports = {
 
     if (isEmpty(results)) return res.status(401).json({ errored: true, error: "Account does not exist" });
 
-      const validuserpassword = await bcrypt.compare(password, results.passwordhash);
+      const validuserpassword = await bcrypt.compare(userpassword, results.userpassword);
 
     if (!validuserpassword)
       return res.status(400).json({ errored: true, error: "Invalid Password" });
-
+ 
     const response = pick(results, ["emailaddress","userpassword"]);    
 
       jwt.sign({ response }, process.env.SECRET_KEY, (err, token) => {
@@ -35,6 +35,7 @@ module.exports = {
       });
   },
   signUpHandler: async (req, res) => {
+    
     
     const { fullname, username, emailaddress, userpassword, phonenumber } =
       req.body;
